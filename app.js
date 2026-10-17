@@ -1,5 +1,7 @@
 const ICON_PLAY = `<svg class="icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
 const ICON_PAUSE = `<svg class="icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+const ICON_EDIT = `<svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 000-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
+const ICON_MEMO = `<svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
 
 const H={admin:'03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', view:'9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0'}; 
 const ROOM='r-h7q3v9x2m5kd'; 
@@ -292,7 +294,8 @@ function makeList(ul, items, o) {
     btnGroup.style.gap = '4px';
 
     o.btns.forEach(([label, fn]) => {
-      const b = document.createElement('button'); b.textContent = label;
+      const b = document.createElement('button');
+      if (label.startsWith('<svg')) b.innerHTML = label; else b.textContent = label;
       b.style.width = '28px';
       b.style.padding = '4px 0'; 
       b.style.display = 'inline-flex';
@@ -338,7 +341,7 @@ function renderPl() {
     click: i => qAdd({ ...items[i], id: uid(), memo: items[i].memo || '' }),
     drop: (a, b) => { const [x] = items.splice(a,1); items.splice(b,0,x); savePl(); },
     btns: [ 
-      ['e', (i, t) => { 
+      [ICON_EDIT, (i, t) => { 
         if (t.isEditing) return;
         t.isEditing = true;
         
@@ -371,7 +374,7 @@ function renderPl() {
 
         t.addEventListener('keydown', finishEdit);
       }],
-      ['m', i => { const m = prompt('edit memo', items[i].memo || ''); if(m !== null) { items[i].memo = m; savePl(); } }],
+      [ICON_MEMO, i => { const m = prompt('edit memo', items[i].memo || ''); if(m !== null) { items[i].memo = m; savePl(); } }],
       ['x', i => { items.splice(i,1); savePl(); }] 
     ]
   });
