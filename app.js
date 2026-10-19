@@ -27,6 +27,48 @@ const State = {
   sync: { q: [], i: -1, playing: false, pos: 0, at: 0, loop: 'off', vol: 100 }
 };
 
+function showModal(title, type = 'prompt', defaultValue = '') {
+  return new Promise((resolve) => {
+    const backdrop = $('#modal-backdrop');
+    const titleEl = $('#modal-title');
+    const inputEl = $('#modal-input');
+    const btnCancel = $('#modal-cancel');
+    const btnConfirm = $('#modal-confirm');
+
+    titleEl.textContent = title;
+    backdrop.classList.remove('hide');
+    
+    if (type === 'prompt') {
+      inputEl.classList.remove('hide');
+      inputEl.value = defaultValue;
+      inputEl.focus();
+      inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
+    } else {
+      inputEl.classList.add('hide'); // confirm일 때는 입력창을 숨김
+      btnConfirm.focus();
+    }
+
+    const cleanup = () => {
+      backdrop.classList.add('hide');
+      btnCancel.removeEventListener('click', onCancel);
+      btnConfirm.removeEventListener('click', onConfirm);
+      backdrop.removeEventListener('keydown', onKey);
+    };
+
+    const onCancel = () => { cleanup(); resolve(type === 'prompt' ? null : false); };
+    const onConfirm = () => { cleanup(); resolve(type === 'prompt' ? inputEl.value : true); };
+    
+    const onKey = (e) => {
+      if (e.key === 'Enter') onConfirm();
+      if (e.key === 'Escape') onCancel();
+    };
+
+    btnCancel.addEventListener('click', onCancel);
+    btnConfirm.addEventListener('click', onConfirm);
+    backdrop.addEventListener('keydown', onKey);
+  });
+}
+
 function showToast(msg) {
   const container = $('#toast-container');
   const toast = document.createElement('div');
@@ -345,16 +387,36 @@ function renderPl() {
         };
         t.addEventListener('keydown', finishEdit);
       }],
-      [ICON_MEMO, i => { const m = prompt('edit memo', items[i].memo || ''); if(m !== null) { items[i].memo = m; savePl(); } }],
+      
+      [ICON_MEMO, async i => { 
+        const m = await showModal('edit memo', 'prompt', items[i].memo || ''); 
+        if(m !== null) { items[i].memo = m; savePl(); } 
+      }],
       ['x', i => { items.splice(i,1); savePl(); }] 
     ]
   });
 }
 
 $('#plSel').addEventListener('change', e => { State.pi = +e.target.value; renderPl(); });
-$('#plNew').addEventListener('click', () => { const n = prompt('input playlist name'); if(n) { State.PL.push({name:n, items:[]}); State.pi = State.PL.length-1; savePl(); } });
-$('#plRen').addEventListener('click', () => { if(!State.PL[State.pi]) return; const n = prompt('edit playlist name', State.PL[State.pi].name); if(n) { State.PL[State.pi].name = n; savePl(); } });
-$('#plDel').addEventListener('click', () => { if(State.PL[State.pi] && confirm('delete playlist '+State.PL[State.pi].name+'?')) { State.PL.splice(State.pi,1); savePl(); } });
+
+// 리스트 추가/수정/삭제 모달
+$('#plNew').addEventListener('click', async () => { 
+  const n = await showModal('input playlist name'); 
+  if(n) { State.PL.push({name:n, items:[]}); State.pi = State.PL.length-1; savePl(); } 
+});
+
+$('#plRen').addEventListener('click', async () => { 
+  if(!State.PL[State.pi]) return; 
+  const n = await showModal('edit playlist name', 'prompt', State.PL[State.pi].name); 
+  if(n) { State.PL[State.pi].name = n; savePl(); } 
+});
+
+$('#plDel').addEventListener('click', async () => { 
+  if(State.PL[State.pi]) {
+    const ok = await showModal('delete playlist ' + State.PL[State.pi].name + '?', 'confirm');
+    if (ok) { State.PL.splice(State.pi,1); savePl(); }
+  }
+});
 
 $('#plAdd').addEventListener('click', async () => {
   if(!State.PL[State.pi]) return showToast('select playlist');
