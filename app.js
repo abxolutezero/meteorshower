@@ -44,7 +44,7 @@ function showModal(title, type = 'prompt', defaultValue = '') {
       inputEl.focus();
       inputEl.setSelectionRange(inputEl.value.length, inputEl.value.length);
     } else {
-      inputEl.classList.add('hide'); // confirm일 때는 입력창을 숨김
+      inputEl.classList.add('hide');
       btnConfirm.focus();
     }
 
@@ -329,7 +329,7 @@ function makeList(ul, items, o) {
 
     o.btns.forEach(([label, fn]) => {
       const b = document.createElement('button');
-      if (label.startsWith('<svg')) b.innerHTML = label; else b.textContent = label;
+      if (label.startsWith('<svg>')) b.innerHTML = label; else b.textContent = label;
       b.style.width = '28px'; b.style.padding = '4px 0'; 
       b.style.display = 'inline-flex'; b.style.justifyContent = 'center'; b.style.alignItems = 'center';
       b.addEventListener('click', () => fn(i, t)); btnGroup.append(b);
@@ -371,21 +371,40 @@ function renderPl() {
     btns: [ 
       [ICON_EDIT, (i, t) => { 
         if (t.isEditing) return;
-        t.isEditing = true; t.contentEditable = 'true'; 
-        t.style.borderBottom = '1px solid var(--d)'; t.focus(); 
-        const sel = window.getSelection(); sel.selectAllChildren(t); sel.collapseToEnd();
+        t.isEditing = true;
+        t.contentEditable = 'true'; 
+        t.style.borderBottom = '1px solid var(--d)'; 
+        t.focus(); 
+        
+        const sel = window.getSelection();
+        sel.selectAllChildren(t);
+        sel.collapseToEnd();
 
-        const finishEdit = (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault(); 
-            t.contentEditable = 'false'; t.style.borderBottom = ''; 
-            t.scrollLeft = 0; t.isEditing = false;
-            window.getSelection().removeAllRanges();
-            t.removeEventListener('keydown', finishEdit);
-            if (items[i].title !== t.textContent) { items[i].title = t.textContent; savePl(); }
+        const finishEdit = () => {
+          t.contentEditable = 'false'; 
+          t.style.borderBottom = ''; 
+          t.scrollLeft = 0; 
+          t.isEditing = false;
+          
+          window.getSelection().removeAllRanges();
+          t.removeEventListener('keydown', onKeyDown);
+          t.removeEventListener('blur', finishEdit);
+
+          if (items[i].title !== t.textContent) {
+            items[i].title = t.textContent; 
+            savePl(); 
           }
         };
-        t.addEventListener('keydown', finishEdit);
+
+        const onKeyDown = (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault(); 
+            t.blur(); 
+          }
+        };
+
+        t.addEventListener('keydown', onKeyDown);
+        t.addEventListener('blur', finishEdit);
       }],
       
       [ICON_MEMO, async i => { 
@@ -399,7 +418,6 @@ function renderPl() {
 
 $('#plSel').addEventListener('change', e => { State.pi = +e.target.value; renderPl(); });
 
-// 리스트 추가/수정/삭제 모달
 $('#plNew').addEventListener('click', async () => { 
   const n = await showModal('input playlist name'); 
   if(n) { State.PL.push({name:n, items:[]}); State.pi = State.PL.length-1; savePl(); } 
