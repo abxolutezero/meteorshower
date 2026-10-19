@@ -329,7 +329,7 @@ function makeList(ul, items, o) {
 
     o.btns.forEach(([label, fn]) => {
       const b = document.createElement('button');
-      if (label.startsWith('<svg>')) b.innerHTML = label; else b.textContent = label;
+      if (label.startsWith('<svg')) b.innerHTML = label; else b.textContent = label;
       b.style.width = '28px'; b.style.padding = '4px 0'; 
       b.style.display = 'inline-flex'; b.style.justifyContent = 'center'; b.style.alignItems = 'center';
       b.addEventListener('click', () => fn(i, t)); btnGroup.append(b);
