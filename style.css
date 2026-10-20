@@ -128,13 +128,17 @@ li .h { cursor: grab; opacity: 0.3; }
   cursor: pointer;
   padding: 0;
   display: flex;
+  justify-content: flex-start;
+  height: 24px;
 }
 
 #dragHandle {
   cursor: grab;
   display: flex;
   align-items: center;
+  padding-left: 20px;
 }
+
 #dragHandle:active {
   cursor: grabbing;
 }
