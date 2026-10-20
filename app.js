@@ -123,6 +123,9 @@ async function enter(name, h) {
   State.role = h === H.admin ? 'admin' : 'view';
   document.body.className = State.role;
   $('#lobby').classList.add('hide'); $('#app').classList.remove('hide');
+  
+  document.getElementById('playerContainer').style.display = 'flex';
+  
   $('#myName').textContent = (State.role==='admin' ? '[Admin] ' : '') + name;
   $('#seek').disabled = State.role !== 'admin';
   $('#vol').value = State.myVol;
@@ -469,8 +472,55 @@ try {
 } catch {}
 
 const vid = document.getElementById('vid');
-vid.classList.add('folded');
-
 document.getElementById('playerToggleBtn').addEventListener('click', () => {
   vid.classList.toggle('folded');
 });
+
+const playerContainer = document.getElementById('playerContainer');
+const dragHandle = document.getElementById('dragHandle');
+let isDragging = false, startX, startY, initialX, initialY;
+
+function startDrag(e) {
+  isDragging = true;
+  const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+  const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+  
+  startX = clientX;
+  startY = clientY;
+  
+  const rect = playerContainer.getBoundingClientRect();
+  initialX = rect.left;
+  initialY = rect.top;
+  
+  playerContainer.style.bottom = 'auto';
+  playerContainer.style.right = 'auto';
+  playerContainer.style.left = initialX + 'px';
+  playerContainer.style.top = initialY + 'px';
+}
+
+function doDrag(e) {
+  if (!isDragging) return;
+  e.preventDefault(); 
+  
+  const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+  const clientY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+  
+  const dx = clientX - startX;
+  const dy = clientY - startY;
+  
+  playerContainer.style.left = (initialX + dx) + 'px';
+  playerContainer.style.top = (initialY + dy) + 'px';
+}
+
+function stopDrag() {
+  isDragging = false;
+}
+
+dragHandle.addEventListener('mousedown', startDrag);
+dragHandle.addEventListener('touchstart', startDrag, { passive: false });
+
+document.addEventListener('mousemove', doDrag);
+document.addEventListener('touchmove', doDrag, { passive: false });
+
+document.addEventListener('mouseup', stopDrag);
+document.addEventListener('touchend', stopDrag);
