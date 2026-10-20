@@ -467,3 +467,10 @@ try {
   const j = JSON.parse(sessionStorage.getItem('jb') || 'null');
   if(j && (j.h === H.admin || j.h === H.view)) enter(j.name, j.h);
 } catch {}
+
+const vid = document.getElementById('vid');
+vid.classList.add('folded');
+
+document.getElementById('playerToggleBtn').addEventListener('click', () => {
+  vid.classList.toggle('folded');
+});
