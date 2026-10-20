@@ -29,8 +29,6 @@
 
     <div class="grid">
       <article class="card">
-        <div id="vid"><div id="yt"></div></div>
-        
         <header class="player-top">
           <div class="cover-img"></div>
           <div class="info-area">
@@ -122,13 +120,23 @@
 
 <div id="toast-container" class="toast-container"></div>
   
-<button id="playerToggleBtn" class="floating-btn">
-  <svg width="26" height="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <rect x="2" y="5" width="20" height="14" rx="4" fill="#666"/>
-    <path d="M10 9L15 12L10 15V9Z" fill="#EBEBEB"/>
-  </svg>
-</button>
-  
+<div id="playerContainer" style="display: none;">
+  <div id="playerBar">
+    <button id="playerToggleBtn">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <rect x="2" y="5" width="20" height="14" rx="4" fill="#666"/>
+        <path d="M10 9L15 12L10 15V9Z" fill="#E0E0E0"/>
+      </svg>
+    </button>
+    <div id="dragHandle">
+      <svg width="24" height="24" viewBox="0 0 24 24">
+        <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z" fill="#666"/>
+      </svg>
+    </div>
+  </div>
+  <div id="vid" class="folded"><div id="yt"></div></div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="app.js"></script>
