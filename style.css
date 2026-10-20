@@ -102,7 +102,49 @@ li .h { cursor: grab; opacity: 0.3; }
 .small { font-size: 12px; }
 .hide { display: none !important; }
 
-#vid { display: none; }
+#vid {
+  position: fixed;
+  right: 20px;
+  bottom: 80px; 
+  width: 320px;
+  height: 180px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  z-index: 1000;
+  transition: opacity 0.2s;
+}
+
+#vid.folded {
+  width: 200px;
+  height: 200px;
+  opacity: 0.01;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.floating-btn {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--d);
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  z-index: 1001;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.floating-btn:hover {
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 
 body.admin .player-top { margin-bottom: 16px; }
 body.admin .seek-wrap { flex: none; margin-bottom: 8px; }
