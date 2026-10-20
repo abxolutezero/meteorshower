@@ -122,7 +122,7 @@
   
 <div id="playerContainer" style="display: none;">
   <div id="playerBar">
-    <button id="playerToggleBtn">
+    <button id="playerToggleBtn" class="flex-1">
       <svg width="24" height="24" viewBox="0 0 24 24">
         <rect x="2" y="5" width="20" height="14" rx="4" fill="#666"/>
         <path d="M10 9L15 12L10 15V9Z" fill="#E0E0E0"/>
@@ -134,7 +134,9 @@
       </svg>
     </div>
   </div>
-  <div id="vid" class="folded"><div id="yt"></div></div>
+  <div id="vid" class="folded">
+    <div id="yt"></div>
+  </div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
