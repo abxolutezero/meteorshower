@@ -104,10 +104,7 @@ async function sha(t) {
   return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
 }
 
-const rand_name = ['Her cyborg enigma', 'His bounty hunter',
-                  'V', 'Johnny Silverhand', 'Songbird',
-                  'David Martinez', 'Lucy Kushinada',
-                  'Roman Carax', 'D', 'Talia Yang', 'Weak Kingsley'];
+const rand_name = ['Her Cyborg Enigma', 'His Bounty Hunter'];
 
 $('#enter').addEventListener('click', async () => {
   let name = $('#name').value.trim();
