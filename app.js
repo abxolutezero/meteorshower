@@ -508,8 +508,17 @@ function doDrag(e) {
   const dx = clientX - startX;
   const dy = clientY - startY;
   
-  playerContainer.style.left = (initialX + dx) + 'px';
-  playerContainer.style.top = (initialY + dy) + 'px';
+  let newLeft = initialX + dx;
+  let newTop = initialY + dy;
+
+  const maxLeft = window.innerWidth - playerContainer.offsetWidth;
+  const maxTop = window.innerHeight - playerContainer.offsetHeight;
+  
+  newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+  newTop = Math.max(0, Math.min(newTop, maxTop));
+  
+  playerContainer.style.left = newLeft + 'px';
+  playerContainer.style.top = newTop + 'px';
 }
 
 function stopDrag() {
