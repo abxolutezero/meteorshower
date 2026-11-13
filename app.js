@@ -3,7 +3,7 @@ const ICON_PAUSE = `<svg class="icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v1
 const ICON_EDIT = `<svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 000-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`;
 const ICON_MEMO = `<svg class="icon" style="width:16px;height:16px" viewBox="0 0 24 24"><path d="M14 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10l-6-6zm0 6V4.5l5.5 5.5H14z"/></svg>`;
 
-const H={admin:'c0d32e8f4dc23289155077becea663cf165d53cb4185e14010ead5e42936eedb', view:'c0d32e8f4dc23289155077becea663cf165d53cb4185e14010ead5e42936eedb'}; 
+const H={admin:'c0d32e8f4dc23289155077becea663cf165d53cb4185e14010ead5e42936eedb', view:'03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'}; 
 const ROOM='r-h7q3v9x2m5kd'; 
 firebase.initializeApp({
   apiKey:"AIzaSyCYpNrelfnjLgBDZej7OUcJi3KTMXJo2Wg",
